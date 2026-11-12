@@ -1,0 +1,28 @@
+{
+  "name": "repairloope",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  "install:all": "npm install --prefix apps/api && npm install --prefix apps/web",
+  "dev:api": "npm run dev --prefix apps/api",
+  "dev:web": "npm run dev --prefix apps/web",
+  "dev": "concurrently -n api,web \"npm:dev:api\" \"npm:dev:web\"",
+  "build": "npm run build --prefix apps/api && npm run build --prefix apps/web"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samzer77/repairloope.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/samzer77/repairloope/issues"
+  },
+  "homepage": "https://github.com/samzer77/repairloope#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}
