@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Test",
+    "email": "test@test.fr",
+    "role": "owner",
+    "passwordHash": "$2b$10$/SY61cx184sHPML384baiORMCHNfSIcsKaqDOBpmbfU1dmhLja4Vy",
+    "id": "7b956caf-7a69-4a74-8208-fde12ca15fe4",
+    "active": true,
+    "createdAt": "2026-11-17T20:25:40.098Z"
+  },
+  {
+    "name": "samy",
+    "email": "samyyaahi@gmail.com",
+    "role": "owner",
+    "passwordHash": "$2b$10$KdA2tn3TiifbJjkL5fHfi.WCQdH2Wa/HqpeLWMWIMIeWheLFerb1C",
+    "id": "b9e173b9-3880-4769-bcda-82311c4a7072",
+    "active": true,
+    "createdAt": "2026-11-17T20:27:04.672Z"
+  }
+]
