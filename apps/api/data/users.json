@@ -16,5 +16,23 @@
     "id": "b9e173b9-3880-4769-bcda-82311c4a7072",
     "active": true,
     "createdAt": "2026-11-17T20:27:04.672Z"
+  },
+  {
+    "name": "samy",
+    "email": "yahisamy453@gmail.com",
+    "role": "repairer",
+    "passwordHash": "$2b$10$2y4X1dwvLFgq5pfohMdPz.IX43X5S9Gy4DTEJvVnETG5tB0mvBt1u",
+    "id": "51dbdd11-1f62-475d-9474-c0022db99615",
+    "active": true,
+    "createdAt": "2026-11-17T20:28:57.366Z"
+  },
+  {
+    "name": "Admin",
+    "email": "admin@repairloop.fr",
+    "role": "admin",
+    "passwordHash": "$2b$10$2VDdbQD6rYLJYhyhTldYoeAypQsSMHGlc3D075nJE8kmrfHk.K5Gi",
+    "id": "43063a2a-1b5b-45d4-a605-c2a7fc735fec",
+    "active": true,
+    "createdAt": "2026-11-18T23:53:02.672Z"
   }
 ]

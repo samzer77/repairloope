@@ -23,6 +23,18 @@ export const userRepository = {
   async findById(id: string) {
     return (await store.readAll()).find((u) => u.id === id);
   },
+   async findAll() {
+    return store.readAll();
+  },
+
+  async setActive(id: string, active: boolean) {
+    const users = await store.readAll();
+    const user = users.find((u) => u.id === id);
+    if (!user) return undefined;
+    user.active = active;
+    await store.writeAll(users);
+    return user;
+  },
 
   async create(data: Omit<User, "id" | "createdAt" | "active">) {
     const users = await store.readAll();

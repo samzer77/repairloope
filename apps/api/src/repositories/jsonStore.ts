@@ -6,7 +6,7 @@ const DATA_DIR = path.join(__dirname, "..", "..", "data");
 export class JsonStore<T> {
   private file: string;
 
-  constructor(fileName: string) {
+  constructor(fileName: string, private seed: T[] = []) {
     this.file = path.join(DATA_DIR, fileName);
   }
 
@@ -15,7 +15,7 @@ export class JsonStore<T> {
       const content = await fs.readFile(this.file, "utf-8");
       return JSON.parse(content) as T[];
     } catch (err: any) {
-      if (err.code === "ENOENT") return [];
+      if (err.code === "ENOENT") return structuredClone(this.seed);
       throw err;
     }
   }
