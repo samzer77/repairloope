@@ -34,5 +34,32 @@
     "id": "43063a2a-1b5b-45d4-a605-c2a7fc735fec",
     "active": true,
     "createdAt": "2026-11-18T23:53:02.672Z"
+  },
+  {
+    "name": "samy",
+    "email": "sam@gmail.com",
+    "role": "owner",
+    "passwordHash": "$2b$10$ZrsfgdmZMELAwS66aZH0EO8qO7YgO06jNIRmjrZ84LSk1R4Uovn0.",
+    "id": "9c9eb403-e91c-4be3-a9bd-87c09f296a85",
+    "active": true,
+    "createdAt": "2026-11-20T18:12:49.524Z"
+  },
+  {
+    "name": "samso",
+    "email": "samsoum77@gmail.com",
+    "role": "owner",
+    "passwordHash": "$2b$10$Otd2xZja.Y5QVt1H//WBuO83QGcepwV7W7.Iqijwp0SouWj/QX/FS",
+    "id": "1332ae41-3562-49c8-9f3a-b898b0f80a56",
+    "active": true,
+    "createdAt": "2026-11-20T18:38:37.700Z"
+  },
+  {
+    "name": "Samsoum",
+    "email": "samsoum@gmail.com",
+    "role": "repairer",
+    "passwordHash": "$2b$10$6cPIgulEJTOtr4X0WswjI.C/l/TQUVzhhsUSdgD29E10/Igcvxcdq",
+    "id": "765917d0-7668-4b11-9b41-c3b64362e639",
+    "active": true,
+    "createdAt": "2026-11-20T18:39:26.814Z"
   }
 ]
