@@ -13,6 +13,8 @@ import { useAuth } from "@/features/auth/AuthContext";
 import { api } from "@/lib/api";
 import { CLOSED_STATUSES, type RepairRequest } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
+import { RepairerQuoteSection } from "@/components/request/RepairerQuoteSection";
+import { RepairerProgressSection } from "@/components/request/RepairerProgressSection";
 
 export function RequestDetail() {
   const { id } = useParams<{ id: string }>();
@@ -49,6 +51,13 @@ export function RequestDetail() {
   }
 
   const isOwner = user.role === "owner" && user.id === request.ownerId;
+
+  const isRepairer = user.role === "repairer";
+  const isSelectedRepairer =
+  isRepairer &&
+  !!request.selectedQuoteId &&
+  request.quotes.some((q) => q.id === request.selectedQuoteId && q.repairerId === user.id);
+
   const canCancel =
     isOwner && !CLOSED_STATUSES.includes(request.status) && request.status !== "in_repair";
 
@@ -92,7 +101,12 @@ export function RequestDetail() {
 
       <QuestionsSection request={request} isOwner={isOwner} busy={busy} run={run} />
       <QuotesSection request={request} isOwner={isOwner} busy={busy} run={run} />
+      {isRepairer && (
+        <RepairerQuoteSection request={request} busy={busy} run={run} userId={user.id} />
+      )}
       <AppointmentSection request={request} isOwner={isOwner} busy={busy} run={run} />
+      {isSelectedRepairer && <RepairerProgressSection request={request} busy={busy} run={run} />}
+      {request.report && <ReportView report={request.report} />}
       {request.report && <ReportView report={request.report} />}
       <ReviewSection request={request} isOwner={isOwner} busy={busy} run={run} />
     </div>
