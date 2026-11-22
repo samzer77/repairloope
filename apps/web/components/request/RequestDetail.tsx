@@ -15,6 +15,8 @@ import { CLOSED_STATUSES, type RepairRequest } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { RepairerQuoteSection } from "@/components/request/RepairerQuoteSection";
 import { RepairerProgressSection } from "@/components/request/RepairerProgressSection";
+import { RepairerQuestionForm } from "@/components/request/RepairerQuestionForm";
+
 
 export function RequestDetail() {
   const { id } = useParams<{ id: string }>();
@@ -51,7 +53,7 @@ export function RequestDetail() {
       setBusy(false);
     }
   }, []);
-  
+
       if (!request || !user) {
     return error ? (
       <p className="rounded bg-red-50 p-3 text-red-700">{error}</p>
@@ -110,6 +112,7 @@ export function RequestDetail() {
       </header>
 
       <QuestionsSection request={request} isOwner={isOwner} busy={busy} run={run} />
+      {isRepairer && <RepairerQuestionForm request={request} busy={busy} run={run} />}
       <QuotesSection request={request} isOwner={isOwner} busy={busy} run={run} />
       {isRepairer && (
         <RepairerQuoteSection request={request} busy={busy} run={run} userId={user.id} />
