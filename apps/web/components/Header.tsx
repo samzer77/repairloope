@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ButtonLink from "./ButtonLink";
+import ButtonLink from "@/components/ButtonLink";
+
 import { useAuth } from "@/features/auth/AuthContext";
 
 export default function Header() {
@@ -29,7 +30,7 @@ export default function Header() {
             Réparateurs
           </Link>
 
-          {!loading && user ? (
+                    {!loading && user ? (
             <>
               <Link
                 href="/dashboard"
@@ -37,6 +38,14 @@ export default function Header() {
               >
                 Tableau de bord
               </Link>
+              {user.role === "repairer" && (
+                <Link
+                  href="/profile"
+                  className="text-sm font-medium text-slate-700 hover:text-emerald-700"
+                >
+                  Mon profil
+                </Link>
+              )}
               <button
                 onClick={handleLogout}
                 className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-100"
@@ -45,6 +54,7 @@ export default function Header() {
               </button>
             </>
           ) : (
+
             !loading && (
               <>
                 <Link
@@ -57,6 +67,7 @@ export default function Header() {
               </>
             )
           )}
+          
         </nav>
       </div>
     </header>

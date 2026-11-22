@@ -61,5 +61,14 @@
     "id": "765917d0-7668-4b11-9b41-c3b64362e639",
     "active": true,
     "createdAt": "2026-11-20T18:39:26.814Z"
+  },
+  {
+    "name": "Myro",
+    "email": "samsoumm@gmail.com",
+    "role": "repairer",
+    "passwordHash": "$2b$10$RM7CQI8cNJLSHg/i1tV5i.Jg52GLlvBB2DQP.bVwTssievZeI/GA6",
+    "id": "ecc8a2f8-34b6-4f7e-8b9f-ed8230a2f5cb",
+    "active": true,
+    "createdAt": "2026-11-22T22:07:21.154Z"
   }
 ]
