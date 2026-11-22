@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import { StatusBadge } from "@/components/StatusBadge";
 import { AppointmentSection } from "@/components/request/AppointmentSection";
@@ -10,7 +10,7 @@ import { QuotesSection } from "@/components/request/QuotesSection";
 import { ReviewSection, ReportView } from "@/components/request/ReviewSection";
 import type { RunAction } from "@/components/request/shared";
 import { useAuth } from "@/features/auth/AuthContext";
-import { api } from "@/lib/api";
+import { api, ApiError } from "@/lib/api";
 import { CLOSED_STATUSES, type RepairRequest } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { RepairerQuoteSection } from "@/components/request/RepairerQuoteSection";
@@ -30,19 +30,29 @@ export function RequestDetail() {
       .catch((e: Error) => setError(e.message));
   }, [id]);
 
+  const busyRef = useRef(false);
+
   const run: RunAction = useCallback(async (action) => {
+    if (busyRef.current) return; // ignore les clics répétés avant le rafraîchissement
+    busyRef.current = true;
     setBusy(true);
     setError("");
     try {
       setRequest(await action());
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Erreur inattendue");
+      if (e instanceof ApiError && Object.keys(e.fieldErrors).length > 0) {
+        // Affiche les erreurs de champ, par exemple « demande incomplète » au moment de soumettre
+        setError(Object.values(e.fieldErrors).join(" · "));
+      } else {
+        setError(e instanceof Error ? e.message : "Erreur inattendue");
+      }
     } finally {
+      busyRef.current = false;
       setBusy(false);
     }
   }, []);
-
-  if (!request || !user) {
+  
+      if (!request || !user) {
     return error ? (
       <p className="rounded bg-red-50 p-3 text-red-700">{error}</p>
     ) : (
@@ -106,7 +116,7 @@ export function RequestDetail() {
       )}
       <AppointmentSection request={request} isOwner={isOwner} busy={busy} run={run} />
       {isSelectedRepairer && <RepairerProgressSection request={request} busy={busy} run={run} />}
-      {request.report && <ReportView report={request.report} />}
+      
       {request.report && <ReportView report={request.report} />}
       <ReviewSection request={request} isOwner={isOwner} busy={busy} run={run} />
     </div>
