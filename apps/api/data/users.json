@@ -50,7 +50,7 @@
     "role": "owner",
     "passwordHash": "$2b$10$Otd2xZja.Y5QVt1H//WBuO83QGcepwV7W7.Iqijwp0SouWj/QX/FS",
     "id": "1332ae41-3562-49c8-9f3a-b898b0f80a56",
-    "active": true,
+    "active": false,
     "createdAt": "2026-11-20T18:38:37.700Z"
   },
   {
@@ -70,5 +70,14 @@
     "id": "ecc8a2f8-34b6-4f7e-8b9f-ed8230a2f5cb",
     "active": true,
     "createdAt": "2026-11-22T22:07:21.154Z"
+  },
+  {
+    "name": "Admin",
+    "email": "samy@gmail.com",
+    "role": "admin",
+    "passwordHash": "$2b$10$eRbZ6j0JruIJUZiDYcfEe.Lw9QtTdGP7o8LzELoZNOfmzNVgJtgB2",
+    "id": "8a619553-22f6-4e9c-9d40-0fd4eb128336",
+    "active": true,
+    "createdAt": "2026-11-27T17:34:19.250Z"
   }
 ]

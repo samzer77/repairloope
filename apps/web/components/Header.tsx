@@ -46,6 +46,15 @@ export default function Header() {
                   Mon profil
                 </Link>
               )}
+                            {user.role === "admin" && (
+                <Link
+                  href="/admin"
+                  className="text-sm font-medium text-slate-700 hover:text-emerald-700"
+                >
+                  Administration
+                </Link>
+              )}
+
               <button
                 onClick={handleLogout}
                 className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-100"
