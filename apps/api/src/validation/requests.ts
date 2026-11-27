@@ -2,7 +2,18 @@ import { z } from "zod";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
-const imageUrl = z.string().trim().url("URL invalide").or(z.literal("")).optional();
+const imageUrl = z
+  .string()
+  .trim()
+  .refine(
+    (s) =>
+      s === "" ||
+      /^data:image\/(jpeg|png|webp);base64,/.test(s) ||
+      /^https?:\/\//.test(s),
+    "Image invalide (JPG, PNG ou WebP)"
+  )
+  .optional();
+
 
 // Brouillon : seul le titre est obligatoire
 export const draftSchema = z.object({
@@ -17,8 +28,8 @@ export const draftSchema = z.object({
 // Soumission : tout est obligatoire
 export const requestSchema = z.object({
   category: z.string().min(1, "Choisis une catégorie"),
-  title: z.string().trim().min(5, "Le titre doit contenir au moins 5 caractères"),
-  description: z.string().trim().min(20, "La description doit contenir au moins 20 caractères"),
+  title: z.string().trim().min(1, "Le titre doit contenir au moins 1 caractères"),
+  description: z.string().trim().min(2, "La description doit contenir au moins 2 caractères"),
   location: z.string().trim().min(2, "Localisation requise"),
   availability: z.string().trim().min(3, "Indique tes disponibilités"),
   imageUrl,

@@ -13,7 +13,8 @@ app.use(
     origin: ["http://localhost:3000", "http://127.0.0.1:3000", "http://10.188.255.30:3000"],
   }),
 );
-app.use(express.json());
+app.use(express.json({ limit: "4mb" }));
+
 
 app.get("/", (_req, res) => {
   res.json({ app: "RepairLoop API", health: "/api/health" });

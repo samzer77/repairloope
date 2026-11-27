@@ -1,7 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { Button } from "@/components/Button";
 import { api, ApiError } from "@/lib/api";
 import type { DraftPayload, RepairRequest } from "@/lib/types";
@@ -9,6 +16,8 @@ import type { DraftPayload, RepairRequest } from "@/lib/types";
 const EMPTY: DraftPayload = {
   category: "", title: "", description: "", location: "", availability: "", imageUrl: "",
 };
+
+const MAX_PHOTO_BYTES = 2 * 1024 * 1024; // 2 Mo
 
 const inputClass =
   "mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-emerald-500 focus:outline-none";
@@ -21,6 +30,16 @@ function Field({ label, error, children }: { label: string; error?: string; chil
       {error && <span className="mt-1 block text-xs text-red-600">{error}</span>}
     </label>
   );
+}
+
+// Lit le fichier choisi et renvoie son contenu encodé en texte (data URL)
+function readAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Lecture du fichier impossible"));
+    reader.readAsDataURL(file);
+  });
 }
 
 export function RequestForm({ initial }: { initial?: RepairRequest }) {
@@ -41,7 +60,9 @@ export function RequestForm({ initial }: { initial?: RepairRequest }) {
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState("");
+  const [photoError, setPhotoError] = useState("");
   const [busy, setBusy] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     api.categories
@@ -54,6 +75,36 @@ export function RequestForm({ initial }: { initial?: RepairRequest }) {
     (key: keyof DraftPayload) =>
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  async function handlePhoto(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    setPhotoError("");
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setPhotoError("Le fichier doit être une image");
+      e.target.value = "";
+      return;
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      setPhotoError("Photo trop lourde (2 Mo maximum)");
+      e.target.value = "";
+      return;
+    }
+
+    try {
+      const dataUrl = await readAsDataUrl(file);
+      setForm((f) => ({ ...f, imageUrl: dataUrl }));
+    } catch (err) {
+      setPhotoError(err instanceof Error ? err.message : "Erreur inattendue");
+    }
+  }
+
+  function removePhoto() {
+    setForm((f) => ({ ...f, imageUrl: "" }));
+    setPhotoError("");
+    if (fileInput.current) fileInput.current.value = "";
+  }
 
   /** Enregistre le brouillon, puis le soumet si demandé. */
   async function save(submit: boolean) {
@@ -116,9 +167,30 @@ export function RequestForm({ initial }: { initial?: RepairRequest }) {
         <input className={inputClass} value={form.availability} onChange={set("availability")} placeholder="Ex. Week-ends" />
       </Field>
 
-      <Field label="Lien vers une photo (facultatif)" error={errors.imageUrl}>
-        <input className={inputClass} type="url" value={form.imageUrl ?? ""} onChange={set("imageUrl")} />
-      </Field>
+      {/* Hors de <label> : un bouton à l'intérieur d'un label déclencherait le sélecteur de fichier */}
+      <div className="block text-sm font-medium text-slate-700">
+        <p>Photo (facultatif)</p>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/*"
+          onChange={handlePhoto}
+          className="mt-1 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700 hover:file:bg-emerald-100"
+        />
+        <p className="mt-1 text-xs font-normal text-slate-500">JPG, PNG ou WebP, 2 Mo maximum.</p>
+        {photoError && <span className="mt-1 block text-xs text-red-600">{photoError}</span>}
+        {errors.imageUrl && <span className="mt-1 block text-xs text-red-600">{errors.imageUrl}</span>}
+
+        {form.imageUrl && (
+          <div className="mt-3 space-y-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={form.imageUrl} alt="Aperçu de la photo" className="max-h-48 rounded-lg object-contain" />
+            <Button type="button" variant="secondary" onClick={removePhoto}>
+              Retirer la photo
+            </Button>
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-wrap gap-3 pt-2">
         <Button type="button" variant="secondary" disabled={busy} onClick={() => save(false)}>
