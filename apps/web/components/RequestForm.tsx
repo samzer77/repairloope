@@ -117,9 +117,15 @@ export function RequestForm({ initial }: { initial?: RepairRequest }) {
       const saved = id
         ? await api.requests.update(id, payload)
         : await api.requests.create(payload);
-      setId(saved.id);
-      if (submit) await api.requests.submit(saved.id);
-      router.push("/dashboard");
+     setId(saved.id);
+if (submit) {
+  await api.requests.submit(saved.id);
+  router.push("/dashboard");
+} else {
+  // Brouillon : on reste dans l'édition de cette demande
+  router.push(`/requests/${saved.id}/edit`);
+}
+
     } catch (err) {
       if (err instanceof ApiError) {
         setErrors(err.fieldErrors);

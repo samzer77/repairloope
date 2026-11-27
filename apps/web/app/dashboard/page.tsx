@@ -4,10 +4,25 @@ import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/Button";
 import { RequestCard } from "@/components/RequestCard";
 import { RequireAuth } from "@/components/RequireAuth";
-import { useAuth } from "../../features/auth/AuthContext"; // adapte le chemin si besoin
+import { useAuth } from "@/features/auth/AuthContext";
 import { api } from "@/lib/api";
 import type { RepairRequest } from "@/lib/types";
 import { isClosed } from "@/lib/utils";
+
+function RequestItem({ request }: { request: RepairRequest }) {
+  // Un brouillon s'ouvre directement en édition ; les autres demandes ouvrent leur détail
+  if (request.status === "draft") {
+    return (
+      <div className="flex flex-col gap-2">
+        <RequestCard request={request} />
+        <ButtonLink href={`/requests/${request.id}/edit`} variant="secondary">
+          Modifier le brouillon
+        </ButtonLink>
+      </div>
+    );
+  }
+  return <RequestCard request={request} />;
+}
 
 function Dashboard() {
   const { user } = useAuth();
@@ -47,7 +62,7 @@ function Dashboard() {
               <p className="text-slate-500">Aucune demande en cours.</p>
             ) : (
               <div className="grid gap-3 sm:grid-cols-2">
-                {active.map((r) => <RequestCard key={r.id} request={r} />)}
+                {active.map((r) => <RequestItem key={r.id} request={r} />)}
               </div>
             )}
           </section>
@@ -58,7 +73,7 @@ function Dashboard() {
               <p className="text-slate-500">Aucune demande clôturée.</p>
             ) : (
               <div className="grid gap-3 sm:grid-cols-2">
-                {closed.map((r) => <RequestCard key={r.id} request={r} />)}
+                {closed.map((r) => <RequestItem key={r.id} request={r} />)}
               </div>
             )}
           </section>
